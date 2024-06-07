@@ -158,24 +158,17 @@ npm run build"
               with the parameter <i>path: 'dist/'</i>
             </li>
             <li>
-              Upload the build artifact using the{' '}
-              <a target="_blank" href="https://github.com/actions/upload-pages-artifact">
-                <i>actions/upload-pages-artifact@v3</i>
-              </a>{' '}
-              with the parameter <i>path: 'dist/'</i>
-            </li>
-            <li>
               Create a second job to deploy this artifact
               <ul>
                 <li>
-                  Called it <i>cd-pipeline</i>
+                  Call it <i>cd-pipeline</i>
                 </li>
                 <li>
                   Create a dependency to the <i>ci-pipeline</i> job
                 </li>
                 <li>
-                  Provide the github.token with the additional permissions: <i>pages: write</i> next
-                  to <i>id-token</i>
+                  Provide the github.token with the permission: <i>pages: write</i> in addition
+                  to <i>id-token</i>, which it had by default, but would loose otherwise.
                   <ul>
                     <li>
                       Docs:{' '}
@@ -187,24 +180,6 @@ npm run build"
                       </a>
                     </li>
                   </ul>
-                </li>
-                <li>
-                  <a
-                    href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idenvironment"
-                    target="_blank"
-                  >
-                    Add an environment
-                  </a>{' '}
-                  with the name <i>github-pages</i>
-                </li>
-                <li>
-                  Called it <i>cd-pipeline</i>
-                </li>
-                <li>
-                  Create a dependency to the <i>ci-pipeline</i> job
-                </li>
-                <li>
-                  Provide the github.token with the additional permissions: <i>pages: write</i>
                 </li>
                 <li>
                   <a
