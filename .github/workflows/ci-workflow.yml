@@ -22,7 +22,7 @@ jobs:
         run: npm run prettier
 
       - name: Check types
-        run: npm run typecheck
+        run: npm run type check
 
       - name: Check linting
         run: npm run lint
@@ -42,6 +42,8 @@ jobs:
   cd-pipeline:
     runs-on: ubuntu-latest
     needs: ci-pipeline
+    outputs:
+      page-url: ${{ steps.deployment.outputs.page_url }}
     permissions:
       pages: write
       id-token: write
@@ -52,3 +54,40 @@ jobs:
       - name: deploy to GitHub Pages
         uses: actions/deploy-pages@v4
         id: deployment
+
+  smoke-test:
+    runs-on: ubuntu-latest
+    needs: cd-pipeline
+    timeout-minutes: 3
+    strategy:
+      matrix:
+        browser-name: [firefox, chromium]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run:
+          npx playwright install ${{ matrix.browser-name }}
+
+      - name: Run Playwright tests
+        run:
+          npx playwright test --project ${{ matrix.browser-name }}
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ needs.cd-pipeline.outputs.page-url }}
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name:
+            playwright-report-${{ matrix.browser-name }}
+          path: playwright-report/
+          retention-days: 1
