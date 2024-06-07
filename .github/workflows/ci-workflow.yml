@@ -22,7 +22,7 @@ jobs:
 #        run: npm run prettier
 
       - name: Check types
-        run: npm run type check
+        run: npm run type-check
 
       - name: Check linting
         run: npm run lint
