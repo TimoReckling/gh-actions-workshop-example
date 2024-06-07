@@ -36,8 +36,8 @@ jobs:
       - name: upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          name: artifact
-          path: 'dist'
+          name: github-pages
+          path: 'dist/'
 
   cd-pipeline:
     runs-on: ubuntu-latest
